@@ -4,6 +4,8 @@ function stringLengthCheck(string, maxLength) {
 
 stringLengthCheck('рандомная строка', 15);
 
+
+
 function polindrom(string) {
   string = string.replaceAll(' ', '').toLowerCase();
   let newString = '';
