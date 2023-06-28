@@ -8,8 +8,6 @@ const AVATAR_COUNT = 6;
 const LIKE_MIN = 15;
 const LIKE_MAX = 200;
 const COMMENT_COUNT = 30;
-const randomCommentID = createRandomIdFromRangeGenerator(1, FOTO_COUNT);
-const randomPostID = createRandomIdFromRangeGenerator(1, FOTO_COUNT);
 const NAMES = [
   'Алексей',
   'Борис',
@@ -56,7 +54,7 @@ function createRandomIdFromRangeGenerator(min, max) {
   return function () {
     let currentValue = getRandomInteger(min, max);
     if (previousValues.length >= (max - min + 1)) {
-      return null;
+      return 'null';
     }
     while (previousValues.includes(currentValue)) {
       currentValue = getRandomInteger(min, max);
@@ -66,10 +64,14 @@ function createRandomIdFromRangeGenerator(min, max) {
   };
 }
 
+
+const randomPostID = createRandomIdFromRangeGenerator(1, FOTO_COUNT);
+const randomPhotoId = createRandomIdFromRangeGenerator(1, FOTO_COUNT);
+
 //формируем один коммент
 
-const createMessage = () => ({
-  id: randomCommentID(1, COMMENT_COUNT),
+const createMessage = (commentId) => ({
+  id: commentId,
   avatar: `img/avatar-${getRandomInteger(1, AVATAR_COUNT)}.svg`,
   message:  MESSAGES[getRandomInteger(0, MESSAGES.length - 1)] ,
   name: NAMES[getRandomInteger(0, NAMES.length - 1)]
@@ -78,8 +80,11 @@ const createMessage = () => ({
 //формируем массив комментариев
 const createCommentsArray = (number) => {
   const COMMENTS = [];
+  const randomCommentID = createRandomIdFromRangeGenerator(1, number);
+
   for (let i = 0; i < number; i++) {
-    COMMENTS.push(createMessage());
+    const randomId = randomCommentID()
+    COMMENTS.push(createMessage(randomId));
   }
   return COMMENTS;
 };
@@ -88,7 +93,7 @@ const createCommentsArray = (number) => {
 
 const createPost = () => ({
   id: randomPostID(),
-  url:`photos/${randomPostID()}.jpg`,
+  url:`photos/${randomPhotoId()}.jpg`,
   descripption: DESCRIPTIONS[getRandomInteger(1, DESCRIPTIONS.length - 1)],
   likes:getRandomInteger(LIKE_MIN, LIKE_MAX),
   comments: createCommentsArray(getRandomInteger(0, COMMENT_COUNT))
