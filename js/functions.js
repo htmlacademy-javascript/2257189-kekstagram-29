@@ -1,8 +1,12 @@
+//Проверка количества символов
+
 function stringLengthCheck(string, maxLength) {
   return string.length <= maxLength;
 }
 
 stringLengthCheck('рандомная строка', 15);
+
+//Полиндром
 
 function palindrome(string) {
   string = string.replaceAll(' ', '').toLowerCase();
@@ -13,17 +17,28 @@ function palindrome(string) {
   return newString === string
 }
 
+//Проверка рабочего времени
 
-const startWorkDay =
-const endWorkDay =
-const startMeeting =
-const durationMeeting = ;
+function isMeetingWithinWorkingHours(startWorkingTime, endWorkingTime, startMeetingTime, meetingDuration) {
+  const startWorking = convertTimeToMinutes(startWorkingTime);
+  const endWorking = convertTimeToMinutes(endWorkingTime);
+  const startMeeting = convertTimeToMinutes(startMeetingTime);
+  const endMeeting = startMeeting + meetingDuration;
 
-const woktTime = {'08:00', '17:30', '14:00', 90}; // true
-woktTime('8:0', '10:0', '8:0', 120);     // true
-woktTime('08:00', '14:30', '14:00', 90); // false
-woktTime('14:00', '17:30', '08:0', 90);  // false
-woktTime('8:00', '17:30', '08:00', 900); // false
+  if (startMeeting >= startWorking && endMeeting <= endWorking) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
-const phase = workTime.split(',');
-console.log(phase)
+function convertTimeToMinutes(time) {
+  const [hours, minutes] = time.split(':').map(Number);
+  return hours * 60 + minutes;
+}
+
+console.log(isMeetingWithinWorkingHours('08:00', '17:30', '14:00', 90))
+console.log(isMeetingWithinWorkingHours('8:0', '10:0', '8:0', 120))
+console.log(isMeetingWithinWorkingHours('08:00', '14:30', '14:00', 90))
+console.log(isMeetingWithinWorkingHours('14:00', '17:30', '08:0', 90))
+console.log(isMeetingWithinWorkingHours('8:00', '17:30', '08:00', 900))
