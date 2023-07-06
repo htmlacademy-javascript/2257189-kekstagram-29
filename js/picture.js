@@ -1,11 +1,8 @@
 import { createPostArray } from './data.js';
 
-
 const photoContainer = document.querySelector('.pictures');
 const photoTemplate = document.querySelector('#picture').content.querySelector('.picture');
-
 const newPhotos = createPostArray(25);
-
 const newPhotoFragment = document.createDocumentFragment();
 
 newPhotos.forEach(({url, description, likes, comments}) => {
@@ -17,6 +14,4 @@ newPhotos.forEach(({url, description, likes, comments}) => {
   newPhotoFragment.appendChild(newPhotoElement);
 });
 
-photoContainer.append(newPhotoFragment)
-
-
+photoContainer.append(newPhotoFragment);
