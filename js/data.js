@@ -2,7 +2,6 @@
 // import { createRandomIdFromRangeGenerator } from './util.js';
 
 
-
 const FOTO_COUNT = 25;
 const AVATAR_COUNT = 6;
 const LIKE_MIN = 15;
@@ -83,7 +82,7 @@ const createCommentsArray = (number) => {
   const randomCommentID = createRandomIdFromRangeGenerator(1, number);
 
   for (let i = 0; i < number; i++) {
-    const randomId = randomCommentID()
+    const randomId = randomCommentID();
     COMMENTS.push(createMessage(randomId));
   }
   return COMMENTS;
