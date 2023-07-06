@@ -100,6 +100,7 @@ const createPost = () => ({
 
 //формируем массив постов
 
+
 const createPostArray = (number) => {
   const POSTS = [];
   for(let i = 0; i < number; i++) {
@@ -108,4 +109,4 @@ const createPostArray = (number) => {
   return POSTS;
 };
 
-createPostArray(FOTO_COUNT);
+export {createPostArray }
