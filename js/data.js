@@ -66,7 +66,7 @@ const createCommentsArray = (number) => {
 const createPost = () => ({
   id: randomPostID(),
   url:`photos/${randomPhotoId()}.jpg`,
-  descripption: DESCRIPTIONS[getRandomInteger(1, DESCRIPTIONS.length - 1)],
+  description: DESCRIPTIONS[getRandomInteger(1, DESCRIPTIONS.length - 1)],
   likes:getRandomInteger(LIKE_MIN, LIKE_MAX),
   comments: createCommentsArray(getRandomInteger(0, COMMENT_COUNT))
 });
