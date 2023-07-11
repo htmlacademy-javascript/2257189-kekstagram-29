@@ -5,6 +5,7 @@ function getRandomInteger(min, max) {
   const upper = Math.floor(Math.max(Math.abs(min), Math.abs(max)));
   const result = Math.random() * (upper - lower + 1) + lower;
 
+
   return Math.floor(result);
 }
 
@@ -24,5 +25,14 @@ function createRandomIdFromRangeGenerator(min, max) {
   };
 }
 
+// функция закрытия окна на ESC
+
+function isEscapeKey(evt) {
+  return evt.key === 'Escape';
+}
+
+// Экспорт функций
+
 export { getRandomInteger };
 export { createRandomIdFromRangeGenerator };
+export { isEscapeKey };
