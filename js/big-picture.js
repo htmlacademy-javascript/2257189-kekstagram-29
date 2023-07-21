@@ -64,7 +64,8 @@ const onCommentsLoaderClick = (evt) => {
   renderComments();
 };
 
-function openBigPicture () { //функция открытия большой фотки
+function openBigPicture() { //функция открытия большой фотки
+  commentsShow = 0;
   bigPicture.classList.remove('hidden'); //убираем Hidden
   document.body.classList.add('modal-open'); // вешаем класс открытого окна
   document.addEventListener('keydown', onKeyDown); // вешаем обработчик закрытия по esc
