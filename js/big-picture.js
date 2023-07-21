@@ -88,3 +88,4 @@ const renderBigPicture = (data) => {
 
 
 export { renderBigPicture };
+export { onKeyDown };
