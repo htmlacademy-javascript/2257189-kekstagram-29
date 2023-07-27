@@ -1,6 +1,7 @@
 import { isEscapeKey } from './util.js';
 import { resetEffects } from './effects.js';
 import { scaleReset } from './scale.js';
+import { sendData } from './api.js';
 
 const form = document.querySelector('.img-upload__form');
 const uploadFile = form.querySelector('#upload-file');
@@ -36,8 +37,6 @@ const closeModal = () => {
 };
 
 const openModal = () => {
-  pristine.reset();
-  form.reset();
   document.body.classList.add('modal-open');
   imgUpload.classList.remove('hidden');
   document.addEventListener('keydown', onDocumentKeydown);
@@ -161,8 +160,14 @@ form.addEventListener('submit', (evt) => {
   document.addEventListener('click', closeModalWithBody);
   if (isValidated) {
     blockSubmitButton();
+    sendData(new FormData(evt.target)).then(() => {
+      showSuccessMessage();
+      form.reset();
+      closeModal();
+    })
+      .catch(showErrorMessage);
+
     unblockSubmitButton();
-    showSuccessMessage();
   } else {
     showErrorMessage();
   }

@@ -9,7 +9,7 @@ const commentTemplate = commentsList.querySelector('.social__comment'); // од�
 const commentCountElement = bigPicture.querySelector('.social__comment-count'); //общее количество комментариев
 const commentsLoaderElement = bigPicture.querySelector('.comments-loader'); //кнопка загрузить еще
 
-let commentsShow = 0; //сколько изначально долно отображаться комментариев
+let commentsShow = 0; //сколько изначально должно отображаться комментариев
 let comments = []; //массив из комментариев
 
 const createComment = ({avatar, message, name}) => { //создаем один коммент
@@ -49,6 +49,7 @@ const fillBigPicture = ({ url, description, likes }) => { //функция за�
   bigPicture.querySelector('.likes-count').textContent = likes; //присваиваем количество лайков
   bigPicture.querySelector('.social__caption').textContent = description; //присваиваем описание
   commentsList.innerHTML = ''; //очищаем комментарии, что бы с нуля сгенерить список
+  commentsShow = 0;
   renderComments(); //вызываем функцию по отрисовке комментариев
 };
 
@@ -65,7 +66,6 @@ const onCommentsLoaderClick = (evt) => {
 };
 
 function openBigPicture() { //функция открытия большой фотки
-  commentsShow = 0;
   bigPicture.classList.remove('hidden'); //убираем Hidden
   document.body.classList.add('modal-open'); // вешаем класс открытого окна
   document.addEventListener('keydown', onKeyDown); // вешаем обработчик закрытия по esc
@@ -88,5 +88,4 @@ const renderBigPicture = (data) => {
 };
 
 
-export { renderBigPicture };
-export { onKeyDown };
+export { renderBigPicture, onKeyDown };
