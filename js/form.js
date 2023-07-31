@@ -2,6 +2,13 @@ import { isEscapeKey } from './util.js';
 import { resetEffects } from './effects.js';
 import { scaleReset } from './scale.js';
 import { sendData } from './api.js';
+import { showErrorMessage, showSuccessMessage } from './message.js';
+
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
+const HASHTAG_COUNT_MAX = 5;
+const VALID_HASHTAG = /^#[a-zа-яё0-9]{1,19}$/i;
+const DESCRIPTION_MAX_LENGTH = 140;
+const DESCRIPTION_ERROR_TEXT = 'Максимальная длина описания - 140 символов';
 
 const form = document.querySelector('.img-upload__form');
 const uploadFile = form.querySelector('#upload-file');
@@ -10,15 +17,9 @@ const hashtagsInput = form.querySelector('.text__hashtags');
 const descriptionInput = form.querySelector('.text__description');
 const cancelButton = document.querySelector('.img-upload__cancel');
 const submitButton = form.querySelector('.img-upload__submit');
-const success = document.querySelector('#success').content.querySelector('.success');
-const successButton = document.querySelector('#success').content.querySelector('.success__button');
-const error = document.querySelector('#error').content.querySelector('.error');
-const errorButton = document.querySelector('#error').content.querySelector('.error__button');
-
-const HASHTAG_COUNT_MAX = 5;
-const VALID_HASHTAG = /^#[a-zа-яё0-9]{1,19}$/i;
-const DESCRIPTION_MAX_LENGTH = 140;
-const DESCRIPTION_ERROR_TEXT = 'Максимальная длина описания - 140 символов';
+const fileChooser = form.querySelector('.img-upload__input[type=file]');
+const imageElement = document.querySelector('.img-upload__preview img');
+const effectsPreviewElement = document.querySelectorAll('.effects__preview');
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -100,78 +101,44 @@ const blockSubmitButton = () => {
   submitButton.textContent = 'Публикация...';
 };
 
-const showSuccess = () => {
-  let flag = false;
-  return () => {
-    if (!flag) {
-      flag = true;
-      document.body.append(success);
+const setOnFormSubmit = () => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValidated = pristine.validate([hashtagsInput, descriptionInput]);
+
+    if (isValidated) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target)).then(() => {
+        showSuccessMessage();
+        form.reset();
+        closeModal();
+      })
+        .catch(showErrorMessage);
+
+      unblockSubmitButton();
     } else {
-      const successClone = document.querySelector('.success');
-      successClone.classList.remove('hidden');
+      showErrorMessage();
     }
-  };
+  });
 };
 
-const showSuccessMessage = showSuccess();
+fileChooser.addEventListener('change', () => {
+  const selectedFile = fileChooser.files[0];
+  const fileName = selectedFile.name.toLowerCase();
 
-const showError = () => {
-  let flag = false;
-  return () => {
-    if (!flag) {
-      flag = true;
-      document.body.append(error);
-    } else {
-      const errorClone = document.querySelector('.error');
-      errorClone.classList.remove('hidden');
-    }
-  };
-};
-const showErrorMessage = showError();
+  const isValidFileType = FILE_TYPES.some((it) => fileName.endsWith(it));
 
-const hideModalMessage = () => {
-  success.classList.add('hidden');
-  error.classList.add('hidden');
-};
-
-const closeModalWithEsc = (evt) => {
-  if (isEscapeKey(evt)) {
-    hideModalMessage();
-  }
-};
-
-const closeModalWithButton = () => {
-  hideModalMessage();
-};
-
-const closeModalWithBody = (evt) => {
-  evt.stopPropagation();
-  if (evt.target.matches('.success') || evt.target.matches('.error')) {
-    hideModalMessage();
-  }
-};
-
-form.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  const isValidated = pristine.validate([hashtagsInput, descriptionInput]);
-  errorButton.addEventListener('click', closeModalWithButton);
-  successButton.addEventListener('click', closeModalWithButton);
-  document.addEventListener('keydown', closeModalWithEsc);
-  document.addEventListener('click', closeModalWithBody);
-  if (isValidated) {
-    blockSubmitButton();
-    sendData(new FormData(evt.target)).then(() => {
-      showSuccessMessage();
-      form.reset();
-      closeModal();
-    })
-      .catch(showErrorMessage);
-
-    unblockSubmitButton();
-  } else {
-    showErrorMessage();
+  if (isValidFileType) {
+    imageElement.src = URL.createObjectURL(selectedFile);
+    effectsPreviewElement.forEach((previewElement) => (previewElement.style.backgroundImage = `url(${imageElement.src})`));
+    openModal();
   }
 });
 
+fileChooser.addEventListener('change', openModal);
 uploadFile.addEventListener('change', openModal);
 cancelButton.addEventListener('click', closeModal);
+
+setOnFormSubmit();
+
+export { closeModal, setOnFormSubmit };
